@@ -34,7 +34,7 @@ const Router = () => {
         <Stack.Screen name="PrivacyScreen" component={PrivacyScreen} />
         <Stack.Screen name="NewAccoundScreen" component={NewAccoundScreen} />
         <Stack.Screen name="NewAccoundTryScreen" component={NewAccoundTryScreen} />
-        <View></View>
+       
 
 
         

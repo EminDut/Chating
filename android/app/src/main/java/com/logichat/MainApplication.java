@@ -1,5 +1,5 @@
 package com.logichat;
-
+import io.invertase.firebase.storage.ReactNativeFirebaseStoragePackage;
 import android.app.Application;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
@@ -23,9 +23,11 @@ public class MainApplication extends Application implements ReactApplication {
         protected List<ReactPackage> getPackages() {
           @SuppressWarnings("UnnecessaryLocalVariable")
           List<ReactPackage> packages = new PackageList(this).getPackages();
+          
           // Packages that cannot be autolinked yet can be added manually here, for example:
-          // packages.add(new MyReactNativePackage());
+         // packages.add(new MyReactNativePackage());
           return packages;
+          
         }
 
         @Override
