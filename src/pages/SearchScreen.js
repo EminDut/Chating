@@ -43,10 +43,7 @@ const SearchScreen = () => {
     style={{flex:1, backgroundColor:"red", borderRadius:99}}>
 
     </View>
-    <View></View>
-    <View></View>
-    <View></View>
-    <View></View>
+   
     </KeyboardAvoidingView>
     </KeyboardControl>
   );

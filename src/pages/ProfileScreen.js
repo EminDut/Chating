@@ -4,32 +4,40 @@ import { useNavigation } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons"
 import ImageCropPicker from 'react-native-image-crop-picker';
 import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
-
-const logoImg = require('../assets/emin.jpg');
+import storage from '@react-native-firebase/storage';
 
 function ProfileScreen() {
-  const navigation = useNavigation();
   const [selectedImage, setSelectedImage] = useState(null);
-
+  
   const handleImageUpload = () => {
     ImageCropPicker.openPicker({
       width: 300,
       height: 400,
       cropping: true,
-    }).then((image) => {
+    }).then(async (image) => {
       setSelectedImage(image.path);
-      // Seçilen fotoğrafın yüklenmesi için Firebase Storage'a gönderme işlemini burada gerçekleştirebilirsiniz.
-      // image.path değeri seçilen fotoğrafın yerel yolunu temsil eder.
-      // Firebase Storage SDK'sını kullanarak fotoğrafı yüklemek için uygun yöntemleri çağırabilirsiniz.
+
+      try {
+        const reference = storage().ref(`images/${Date.now()}.jpg`);
+        await reference.putFile(image.path);
+        console.log('Fotoğraf yüklendi:', reference);
+
+        const downloadURL = await reference.getDownloadURL();
+        console.log('Download URL:', downloadURL);
+      } catch (error) {
+        console.log('Image Upload Error: ', error);
+      }
     }).catch((error) => {
       console.log('ImagePicker Error: ', error);
     });
   };
+ 
 
   const handleCameraCapture = async () => {
     try {
       const cameraPermissionStatus = await check(PERMISSIONS.ANDROID.CAMERA);
       if (cameraPermissionStatus === RESULTS.DENIED) {
+
         const permissionRequestResult = await request(PERMISSIONS.ANDROID.CAMERA);
         if (permissionRequestResult === RESULTS.GRANTED) {
           openCamera();
@@ -39,38 +47,48 @@ function ProfileScreen() {
       }
     } catch (error) {
       console.log('CameraCapture Error: ', error);
-      Alert.alert("Kamera Hatası" , "kamera açılma işlemi sırasında bir hata oluştu.");
+      Alert.alert("Kamera Hatası", "Kamera açılma işlemi sırasında bir hata oluştu.");
     }
   };
 
   const openCamera = () => {
-    ImageCropPicker.openCamera({
-      width: 300,
-      height: 400,
-      cropping: true,
-    }).then((image) => {
-      setSelectedImage(image.path);
-      // Çekilen fotoğrafın yüklenmesi için Firebase Storage'a gönderme işlemini burada gerçekleştirebilirsiniz.
-      // image.path değeri çekilen fotoğrafın yerel yolunu temsil eder.
-      // Firebase Storage SDK'sını kullanarak fotoğrafı yüklemek için uygun yöntemleri çağırabilirsiniz.
-    }).catch((error) => {
-      console.log('CameraCapture Error: ', error);
-    });
+    ImageCropPicker.openCamera({ width: 300, height: 400, cropping: true })
+      .then(async (image) => {
+        setSelectedImage(image.path);
+  
+        try {
+          const reference = storage().ref(`images/${Date.now()}.jpg`);
+          await reference.putFile(image.path);
+          console.log('Fotoğraf yüklendi:', reference);
+  
+          const downloadURL = await reference.getDownloadURL();
+          console.log('Download URL:', downloadURL);
+        } catch (error) {
+          console.log('Image Upload Error: ', error);
+        }
+      })
+      .catch((error) => {
+        console.log('CameraCapture Error: ', error);
+      });
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
-        <Image source={selectedImage ? { uri: selectedImage } : logoImg} style={styles.image} />
-      </View>
+  {selectedImage ? (
+    <Image source={{ uri: selectedImage }} style={styles.image} />
+  ) : (
+    <Text>No Image Selected</Text>
+  )}
+</View>
       <View style={styles.formContainer}>
         <TextInput placeholder="Emin_Ex" style={styles.textInput} />
 
-        <TouchableOpacity onPress={handleImageUpload}>
+        <TouchableOpacity style={styles.iconContainer} onPress={handleImageUpload}>
           <Ionicons name="images" size={50} color="black" />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={handleCameraCapture}>
+        <TouchableOpacity onPress={handleCameraCapture} style={styles.iconContainer}>
           <Ionicons name="camera" size={50} color="black" />
         </TouchableOpacity>
 
@@ -100,7 +118,7 @@ function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'lightgray',
+    backgroundColor:'lightgray',
   },
   imageContainer: {
     alignItems: 'center',
@@ -113,7 +131,7 @@ const styles = StyleSheet.create({
   formContainer: {
     flex: 1,
     paddingHorizontal: 10,
-    backgroundColor:"cornsilk",
+    backgroundColor: "cornsilk",
   },
   textInput: {
     fontSize: 20,
@@ -136,6 +154,16 @@ const styles = StyleSheet.create({
   infoText: {
     flex: 1,
     marginLeft: 10,
+  },
+  iconContainer: {
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20, 
+  },
+  cameraButton: {
+    marginTop: 20,
   },
 });
 
