@@ -8,7 +8,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import LoginScreen from './LoginScreen';
 import HomeScreen from './HomeScreen';
-import MessageScreen from './MessageScreen';
+import ChatList from './ChatList';
 import ProfileScreen from './ProfileScreen';
 import SettingsScreen from './SettingsScreen';
 import TermScreen from './TermScreen';
@@ -72,7 +72,7 @@ const Router = () => {
                     />
                   ),
                 }}
-                component={MessageScreen}
+                component={ChatList}
               />
               <Tab.Screen
                 name="Profile"
