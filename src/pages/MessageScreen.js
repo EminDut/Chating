@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, TextInput, FlatList, Text, StyleSheet,KeyboardAvoidingView} from 'react-native';
 import KeyboardControl from "../Inputs/KeyboardControl"
 
-const SearchScreen = () => {
+const MessageScreen = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
 
@@ -70,4 +70,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SearchScreen;
+export default MessageScreen;

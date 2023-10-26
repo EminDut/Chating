@@ -5,9 +5,10 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
+
 import LoginScreen from './LoginScreen';
 import HomeScreen from './HomeScreen';
-import SearchScreen from './SearchScreen';
+import MessageScreen from './MessageScreen';
 import ProfileScreen from './ProfileScreen';
 import SettingsScreen from './SettingsScreen';
 import TermScreen from './TermScreen';
@@ -54,23 +55,24 @@ const Router = () => {
                       color={'tomato'}
                       size={size}
                     />
+                    
                   ),
                 }}
                 component={HomeScreen}
               />
               <Tab.Screen
-                name="Search"
+                name="mdiChatOutline"
                 options={{
-                  tabBarLabel: 'Search',
+                  tabBarLabel: 'Message',
                   tabBarIcon: ({color, size}) => (
                     <MaterialCommunityIcons
-                      name="magnify"
+                      name="chat"
                       color={'tomato'}
                       size={size}
                     />
                   ),
                 }}
-                component={SearchScreen}
+                component={MessageScreen}
               />
               <Tab.Screen
                 name="Profile"
