@@ -1,26 +1,24 @@
-import * as React from 'react';
-import { View, Text,TextInput,TouchableOpacity} from 'react-native';
-import { useNavigation } from "@react-navigation/native";
-import Ionicons from "react-native-vector-icons/Ionicons"
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { Avatar, Title, Subheading, Button } from 'react-native-paper';
+import HomeScreen from './HomeScreen';
 
+const SettingScreen = () => {
+  const navigation = useNavigation();
 
-function SettingsScreen() {
+  const handleSignOut = () => {
+    navigation.navigate('Login');
+  };
 
-    const navigation = useNavigation();
+  return (
+    <View style={{ alignItems: 'center', marginTop: 16 }}>
+      <Avatar.Text label="un" />
+        <Title>User Name</Title>
+      <Subheading>user@name.com</Subheading>
+      <Button onPress={handleSignOut}>Sign Out</Button>
+    </View>
+  );
+};
 
-    return (
-      <View style={{ flex:1, alignItems: 'center', justifyContent: 'center',backgroundColor:"orange"}}>
-
-        <Text>SettingsScreen</Text>
-        <Ionicons name="hand-right" color={"purple"} size={250} />
-        
-
-
-      </View>
-    );
-  }
-
-  
-
-
-  export default SettingsScreen;
+export default SettingScreen;

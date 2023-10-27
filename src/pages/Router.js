@@ -4,6 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Provider } from "react-native-paper";
 
 
 import LoginScreen from './LoginScreen';
@@ -27,6 +28,7 @@ const Router = () => {
     behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     style={{flex:1}}>
     <NavigationContainer>
+      <Provider>
       <Stack.Navigator
         initialRouteName="login"
         screenOptions={{headerShown: false}}>
@@ -108,6 +110,7 @@ const Router = () => {
           )}
         </Stack.Screen>
       </Stack.Navigator>
+      </Provider>
     </NavigationContainer>
     </KeyboardAvoidingView>
  
