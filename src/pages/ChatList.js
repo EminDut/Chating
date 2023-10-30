@@ -1,13 +1,11 @@
 import React, {useState} from 'react';
-import {View,} from 'react-native';
-import { Avatar, List, Divider, FAB, Portal, Dialog, Button,TextInput,} from 'react-native-paper';
+import {View} from 'react-native';
+import { Avatar, List, Divider,FAB,Portal,Dialog,Button,TextInput, } from 'react-native-paper';
 import KeyboardControl from '../Inputs/KeyboardControl';
 
 const ChatList = () => {
 
-const [isDialogVisible,setİsDialogVisible]=useState(false);
-
-
+  const [isDialogVisible, setİsDialogVisible] = useState(false);
 
   return (
     <View style={{flex: 1}}>
@@ -19,27 +17,26 @@ const [isDialogVisible,setİsDialogVisible]=useState(false);
       <Divider inset={true} />
 
       <Portal>
-        <Dialog visible={isDialogVisible} onDismiss={()=> setİsDialogVisible(false)}>
+        <Dialog
+          visible={isDialogVisible}
+          onDismiss={() => setİsDialogVisible(false)}>
           <Dialog.Title>New Chat</Dialog.Title>
           <Dialog.Content>
-            <TextInput label={"Enter user e-mail"}></TextInput>
+            <TextInput label={'Enter user e-mail'}></TextInput>
           </Dialog.Content>
 
           <Dialog.Actions>
-            <Button onPress={()=>setİsDialogVisible(false)}>CANCEL</Button>
+            <Button onPress={() => setİsDialogVisible(false)}>CANCEL</Button>
             <Button>SAVE</Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>
 
-      <FAB icon="plus" style={{position: 'absolute', right: 16, bottom: 16}}
-      
-      onPress={()=>setİsDialogVisible(true)}
-
+      <FAB
+        icon="plus"
+        style={{position: 'absolute', right: 16, bottom: 16}}
+        onPress={() => setİsDialogVisible(true)}
       />
-
-    
-
     </View>
   );
 };

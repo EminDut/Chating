@@ -1,9 +1,9 @@
 import React from 'react';
-import NewTouch from '../Inputs/NewTouch';
+import NewRecord from '../Inputs/NewRecord';
 
 function NewAccoundScreen() {
   return (
-    <NewTouch
+    <NewRecord
       placeholder1="E-posta Adresi"
       placeholder2="Şifre"
       buttonText="KAYIT OL"

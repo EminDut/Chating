@@ -1,22 +1,50 @@
-import {TextInput} from 'react-native';
 import React, {useState} from 'react';
+import {View} from 'react-native';
+import {TextInput, Button, Avatar, Title, Subheading} from 'react-native-paper';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
-export default function InputUser({user, setUser}) {
+export default function InputUser({user, setUser, password, setPassword}) {
   return (
-    <TextInput
-      placeholder="Kullanıcı Adı"
-      onChangeText={text => setUser(text)}
-      value={user}
-      style={{
-        width: 240,
-        height: 50,
-        borderRadius: 15,
-        borderWidth: 1.2,
-        borderColor: 'darkblue',
-        padding: 15,
-        marginBottom: 15,
-        paddingRight: 30,
-      }}
-    />
+    <View>
+      <TextInput
+        onChangeText={text => setUser(text)}
+        value={user}
+        label="Email"
+        underlineColor="transparent"
+        labelStyle
+        style={{
+          width: wp(70),
+          height: hp(6),
+          backgroundColor: 'white',
+          borderWidth: 1.2,
+          borderRadius: 10,
+          fontSize: 14,
+          borderColor:"gray"
+        }}
+      />
+
+      <TextInput
+        onChangeText={text => setPassword(text)}
+        value={password}
+        label="Password"
+        underlineColor="transparent"
+        secureTextEntry
+        labelStyle
+        style={{
+          width: wp(70),
+          height: hp(6),
+          backgroundColor: 'white',
+          borderWidth: 1,
+          borderRadius: 10,
+          marginVertical: 5,
+          fontSize: 14,
+          borderColor:"gray",
+
+        }}
+      />
+    </View>
   );
 }

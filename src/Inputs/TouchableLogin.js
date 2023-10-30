@@ -11,14 +11,16 @@ export default function TouchableLogin(props) {
 
       onPress={handleLogin}
       
+      
       style={{
 
         width : wp(25),
         height : hp(5),
         borderRadius: 15,
         borderWidth: 1,
-        borderColor: 'darkblue',
+        borderColor: 'gray',
         padding: 8,
+        top:20
       }}>
       <Text style={{left: 16 ,top:2}}>Giriş Yap</Text>
     </TouchableOpacity>
