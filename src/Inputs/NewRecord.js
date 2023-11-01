@@ -1,34 +1,29 @@
-import {
-  StyleSheet,
-  TextInput,
-  View,
-  Text,
-  KeyboardAvoidingView,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
+import { StyleSheet,View, Text, KeyboardAvoidingView, TouchableOpacity, Alert,} from 'react-native';
 import React, {useState} from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp,heightPercentageToDP as hp,} from 'react-native-responsive-screen';
 import {useNavigation} from '@react-navigation/native';
 import KeyboardControl from './KeyboardControl';
 import auth from '@react-native-firebase/auth';
 import PasswordStrengthMeterBar from 'react-native-password-strength-meter-bar';
+import {TextInput} from "react-native-paper";
 
-export default function NewRecord(props) {
+export default function NewRecord() {
+  
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [name,setName]=useState("");
+
 
   const isPasswordStrong =
     /^(?=.*[A-Z])(?=.*\d)(?=.*\W)[a-zA-Z0-9\S]{8,}$/.test(password);
 
   const handleRegister = () => {
+    
     if (!isPasswordStrong) {
       Alert.alert(
+
         'Şifre Zayıf',
         'Şifreniz zorluk kriterlerini karşılamıyor. Daha güçlü bir şifre seçin.',
       );
@@ -43,7 +38,6 @@ export default function NewRecord(props) {
         Alert.alert('Kayıt Başarılı', 'Kullanıcı başarıyla kaydoldu');
         setEmail('');
         setPassword('');
-        setName("")
       })
       .catch(error => {
         Alert.alert(
@@ -81,29 +75,41 @@ export default function NewRecord(props) {
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={Styles.mains}>
           
-          
+ {/* HESAP OLUŞTUR DİZAYNI VE BİLGİLERİ */}
+            
             <TextInput
-              style={Styles.container}
-              placeholder={props.placeholder1}
+              style={Styles.gearinput}
+              placeholder="Kullanıcı Adı"
+              onChangeText={text => setName(text)}
+              value={name}
+              secureTextEntry={true}
+            />
+
+
+            <TextInput
+              style={Styles.gearinput}
+              placeholder="E mail"
               onChangeText={text => setEmail(text)}
               value={email}
             />
 
             <TextInput
-              style={Styles.container}
-              placeholder={props.placeholder2}
+              style={Styles.gearinput}
+              placeholder="Password"
               onChangeText={text => setPassword(text)}
               value={password}
               secureTextEntry={true}
             />
+
+
             <View style={Styles.pass}>
               <PasswordStrengthMeterBar password={password} />
             </View>
 
             <TouchableOpacity
               style={{
-                marginTop: 40,
-                marginLeft: 85,
+                marginTop: 10,
+                marginLeft: 100,
                 width: wp(20),
                 height: hp(6),
                 borderRadius: 10,
@@ -112,7 +118,7 @@ export default function NewRecord(props) {
               }}
               onPress={handleRegister}>
               <Text style={{marginLeft: 12, marginTop: 13}}>
-                {props.buttonText}
+              
               </Text>
             </TouchableOpacity>
           </KeyboardAvoidingView>
@@ -173,6 +179,7 @@ const Styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 250,
+
   },
 
   text: {
@@ -207,4 +214,15 @@ const Styles = StyleSheet.create({
     height: hp(3),
     borderRadius: 5,
   },
+  gearinput : {
+    width: wp(69),
+          height: hp(6),
+          backgroundColor: 'white',
+          borderWidth: 1,
+          borderRadius: 5,
+          marginVertical: 5,
+          fontSize: 14,
+          borderColor:"gray",
+          top:20
+  }
 });

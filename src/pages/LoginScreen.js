@@ -18,39 +18,39 @@ function LoginScreen() {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
 
-  // const handleLogin = async () => {
-  //   try {
-  //     if (user.length > 3 && password.length >= 8) {
-  //       await auth().signInWithEmailAndPassword(user, password);
-
-  //       navigation.navigate('HomeScreen');
-  //     } else {
-  //       Alert.alert(' Kullanıcı adı ve şifre boş geçilemez.');
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     // setMessage(error.message);
-  //     Alert.alert(
-  //       'Kullanıcı Adı veya Şifre yanlış, lütfen tekrar deneyiniz...',
-  //     );
-
-  //     // setUser("");
-  //     // setPassword("");
-  //   }
-  // };
-
-  const handleLogin = async () => {
+  const handleLogin = async (props) => {
     try {
-      navigation.navigate('HomeScreen');
+      if (user.length > 3 && password.length >= 8) {
+        await auth().signInWithEmailAndPassword(user, password);
+
+        navigation.navigate('HomeScreen');
+      } else {
+        Alert.alert(' Kullanıcı adı ve şifre boş geçilemez.');
+      }
     } catch (error) {
       console.log(error);
+      // setMessage(error.message);
       Alert.alert(
         'Kullanıcı Adı veya Şifre yanlış, lütfen tekrar deneyiniz...',
       );
+
       setUser("");
       setPassword("");
     }
   };
+
+  // const handleLogin = async () => {
+  //   try {
+  //     navigation.navigate('HomeScreen');
+  //   } catch (error) {
+  //     console.log(error);
+  //     Alert.alert(
+  //       'Kullanıcı Adı veya Şifre yanlış, lütfen tekrar deneyiniz...',
+  //     );
+  //     setUser("");
+  //     setPassword("");
+  //   }
+  // };
 
   const handleTouchablePress = () => {
     navigation.navigate('TermScreen');
@@ -61,7 +61,7 @@ function LoginScreen() {
   };
 
   const handleUser = () => {
-    navigation.navigate('NewAccoundScreen');
+    navigation.navigate('NewRecord');
   };
 
   return (

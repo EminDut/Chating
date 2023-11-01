@@ -14,8 +14,9 @@ import ProfileScreen from './ProfileScreen';
 import SettingsScreen from './SettingsScreen';
 import TermScreen from './TermScreen';
 import PrivacyScreen from './PrivacyScreen';
-import NewAccoundScreen from './NewAccoundScreen';
 import NewAccoundTryScreen from './NewAccoundTryScreen';
+import NewRecord from '../Inputs/NewRecord';
+
 
 
 const Stack = createNativeStackNavigator();
@@ -35,8 +36,9 @@ const Router = () => {
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="TermScreen" component={TermScreen} />
         <Stack.Screen name="PrivacyScreen" component={PrivacyScreen} />
-        <Stack.Screen name="NewAccoundScreen" component={NewAccoundScreen} />
         <Stack.Screen name="NewAccoundTryScreen" component={NewAccoundTryScreen} />
+        <Stack.Screen name="NewRecord" component={NewRecord} />
+
        
 
 

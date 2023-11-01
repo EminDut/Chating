@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
-import {View} from 'react-native';
-import {TextInput, Button, Avatar, Title, Subheading} from 'react-native-paper';
+import React, { useState } from 'react';
+import { View } from 'react-native';
+import { TextInput} from 'react-native-paper';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -16,11 +16,11 @@ export default function InputUser({user, setUser, password, setPassword}) {
         underlineColor="transparent"
         labelStyle
         style={{
-          width: wp(70),
+          width: wp(69),
           height: hp(6),
           backgroundColor: 'white',
           borderWidth: 1.2,
-          borderRadius: 10,
+          borderRadius: 5,
           fontSize: 14,
           borderColor:"gray"
         }}
@@ -34,17 +34,17 @@ export default function InputUser({user, setUser, password, setPassword}) {
         secureTextEntry
         labelStyle
         style={{
-          width: wp(70),
-          height: hp(6),
-          backgroundColor: 'white',
-          borderWidth: 1,
-          borderRadius: 10,
-          marginVertical: 5,
-          fontSize: 14,
-          borderColor:"gray",
-
-        }}
+           width: wp(69),
+           height: hp(6),
+           backgroundColor: 'white',
+           borderWidth: 1,
+           borderRadius: 5,
+           marginVertical: 5,
+           fontSize: 14,
+           borderColor:"gray",
+           }}
       />
+
     </View>
   );
 }
