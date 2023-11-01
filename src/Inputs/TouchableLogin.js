@@ -7,6 +7,7 @@ export default function TouchableLogin(props) {
   const {handleLogin} = props
 
   return (
+    
     <TouchableOpacity
 
       onPress={handleLogin}

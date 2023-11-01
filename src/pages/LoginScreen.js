@@ -66,6 +66,7 @@ function LoginScreen() {
 
   return (
     <KeyboardControl>
+      <View></View>
       <View style={{flex: 1}}>
         <View
           style={{
