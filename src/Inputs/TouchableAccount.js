@@ -14,12 +14,11 @@ export default function TouchableAccount(prop) {
 
 const Styles = StyleSheet.create({
   container: {
-    top: 20,
+    top: 30,
     fontSize: 15,
-    width: wp(70),
+    width: wp(60),
     height: hp(5),
     marginLeft: 27,
-    marginTop: 10,
   },
-  box: {width: 300, height: 60, borderColor: 'darkblue', padding: 15},
+  box: {borderColor: 'darkblue', marginTop:50},
 });

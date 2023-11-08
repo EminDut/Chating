@@ -16,7 +16,7 @@ function LoginScreen() {
   const navigation = useNavigation();
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
+
 
   const handleLogin = async (props) => {
     try {
@@ -66,7 +66,7 @@ function LoginScreen() {
 
   return (
     <KeyboardControl>
-      <View></View>
+      
       <View style={{flex: 1}}>
         <View
           style={{
@@ -75,8 +75,8 @@ function LoginScreen() {
             backgroundColor: 'white', 
           }}>
           <Image
-            source={logoImg}
-            style={{width: 350, height: 350, marginBottom: -20}}
+            source= {logoImg}
+            style= {{width: 350, height: 350, marginBottom: -20 }}
           />
         </View>
 
@@ -89,8 +89,8 @@ function LoginScreen() {
             paddingTop: 60, 
           }}>
           <InputUser user={user} setUser={setUser} password={password} setPassword={setPassword} />
-          <TouchableLogin handleLogin={handleLogin} />
-          <TouchableAccount handleUser={handleUser} />
+          <TouchableLogin handleLogin = {handleLogin} />
+          <TouchableAccount handleUser = {handleUser} />
         </View>
 
         <View style={{flex: 0.2, flexDirection: 'row'}}>

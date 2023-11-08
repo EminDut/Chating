@@ -12,7 +12,7 @@ export default function InputUser({user, setUser, password, setPassword}) {
       <TextInput
         onChangeText={text => setUser(text)}
         value={user}
-        label="Email"
+        label="E-Mail"
         underlineColor="transparent"
         labelStyle
         style={{

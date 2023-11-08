@@ -6,46 +6,51 @@ import {useNavigation} from '@react-navigation/native';
 import KeyboardControl from './KeyboardControl';
 import auth from '@react-native-firebase/auth';
 import PasswordStrengthMeterBar from 'react-native-password-strength-meter-bar';
-import {TextInput} from "react-native-paper";
+import {TextInput,Subheading} from "react-native-paper";
+
 
 export default function NewRecord() {
   
   const navigation = useNavigation();
+  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [name,setName]=useState("");
+  const [name,setName] = useState("");
+  const [error,setError] = useState("")
 
 
-  const isPasswordStrong =
-    /^(?=.*[A-Z])(?=.*\d)(?=.*\W)[a-zA-Z0-9\S]{8,}$/.test(password);
+  const isPasswordStrong = /^(?=.*[A-Z])(?=.*\d)(?=.*\W)[a-zA-Z0-9\S]{8,}$/.test(password);
 
-  const handleRegister = () => {
-    
+  const NewRecord = async () => {
     if (!isPasswordStrong) {
       Alert.alert(
-
         'Şifre Zayıf',
         'Şifreniz zorluk kriterlerini karşılamıyor. Daha güçlü bir şifre seçin.',
       );
-      return;
+      return; 
     }
+  
+    try {
+      const response = await auth().createUserWithEmailAndPassword(email, password);
 
-    auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then(userCredential => {
-        const user = userCredential.user;
-        console.log('Yeni kullanıcı oluşturuldu:', user);
-        Alert.alert('Kayıt Başarılı', 'Kullanıcı başarıyla kaydoldu');
-        setEmail('');
-        setPassword('');
-      })
-      .catch(error => {
-        Alert.alert(
-          'Kayıt olma hatası',
-          'Kayıt olma işlemi başarısız oldu. Lütfen tekrar deneyin.',
-        );
-      });
+      await response.user.updateProfile({ displayName: name });
+
+      console.log('Yeni kullanıcı oluşturuldu:', response.user);
+      Alert.alert('Kayıt Başarılı', 'Kullanıcı başarıyla kaydoldu');
+
+      setEmail('');
+      setPassword('');
+
+    } catch (error) {
+
+
+      Alert.alert(
+        'Kayıt olma hatası',
+        'Kayıt olma işlemi başarısız oldu. Lütfen tekrar deneyin.',
+      );
+    }
   };
+  
 
   const handleNavigate = () => {
     navigation.navigate('NewAccoundTryScreen');
@@ -54,6 +59,7 @@ export default function NewRecord() {
   return (
     <KeyboardControl>
       <View style={Styles.box}>
+        {!!error && ( <Subheading style = {{color:"red",textAlign:"center",marginBottom:50}}>{error}</Subheading>)}
         <View style={Styles.main}>
           <Ionicons name="heart" color={'red'} size={55} />
         </View>
@@ -77,18 +83,20 @@ export default function NewRecord() {
           
  {/* HESAP OLUŞTUR DİZAYNI VE BİLGİLERİ */}
             
+
+
+
             <TextInput
               style={Styles.gearinput}
               placeholder="Kullanıcı Adı"
               onChangeText={text => setName(text)}
               value={name}
-              secureTextEntry={true}
             />
 
 
             <TextInput
               style={Styles.gearinput}
-              placeholder="E mail"
+              placeholder="E-mail"
               onChangeText={text => setEmail(text)}
               value={email}
             />
@@ -107,18 +115,12 @@ export default function NewRecord() {
             </View>
 
             <TouchableOpacity
-              style={{
-                marginTop: 10,
-                marginLeft: 100,
-                width: wp(20),
-                height: hp(6),
-                borderRadius: 10,
-                borderWidth: 1,
-                borderColor: 'black',
-              }}
-              onPress={handleRegister}>
-              <Text style={{marginLeft: 12, marginTop: 13}}>
-              
+              style={Styles.recordinput}
+              onPress={NewRecord}>
+              <Text style={{marginLeft:15, marginTop: 13}}>
+
+                 Kayıt Ol
+
               </Text>
             </TouchableOpacity>
           </KeyboardAvoidingView>
@@ -215,14 +217,25 @@ const Styles = StyleSheet.create({
     borderRadius: 5,
   },
   gearinput : {
-    width: wp(69),
+
+          width: wp(69),
           height: hp(6),
           backgroundColor: 'white',
           borderWidth: 1,
           borderRadius: 5,
-          marginVertical: 5,
+          marginVertical: 1,
           fontSize: 14,
           borderColor:"gray",
           top:20
-  }
+  },
+
+  recordinput : {
+                marginTop: 25,
+                marginLeft: 100,
+                width: wp(20),
+                height: hp(6),
+                borderRadius: 10,
+                borderWidth: 1,
+                borderColor: 'black',
+  },
 });
