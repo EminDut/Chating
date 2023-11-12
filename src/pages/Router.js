@@ -15,6 +15,7 @@ import TermScreen from './TermScreen';
 import PrivacyScreen from './PrivacyScreen';
 import NewAccoundTryScreen from './NewAccoundTryScreen';
 import NewRecord from '../Inputs/NewRecord';
+import Chat from './Chat';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -38,9 +39,8 @@ const Router = () => {
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="TermScreen" component={TermScreen} />
             <Stack.Screen name="PrivacyScreen" component={PrivacyScreen} />
-            <Stack.Screen
-              name="NewAccoundTryScreen"
-              component={NewAccoundTryScreen}
+            <Stack.Screen name="Chat" component={Chat} />
+            <Stack.Screen name="NewAccoundTryScreen" component={NewAccoundTryScreen}
             />
             <Stack.Screen name="NewRecord" component={NewRecord} />
 
@@ -63,7 +63,7 @@ const Router = () => {
                     component={HomeScreen}
                   />
                   <Tab.Screen
-                    name="mdiChatOutline"
+                    name="ChatList"
                     options={{
                       tabBarLabel: 'Message',
                       tabBarIcon: ({color, size}) => (

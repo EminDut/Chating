@@ -4,13 +4,14 @@ import { useNavigation } from '@react-navigation/native';
 import { Avatar, Title, Subheading, Button } from 'react-native-paper';
 import firebase from "@react-native-firebase/app"
 import auth from '@react-native-firebase/auth';
+import { current } from '@reduxjs/toolkit';
 
 
 
 const SettingScreen = () => {
 
-  const [name,setName] = useState()
-  const [email,setEmail] = useState()
+  const [name,setName] = useState("")
+  const [email,setEmail] = useState("")
 
   const navigation = useNavigation();
 
@@ -28,7 +29,7 @@ const SettingScreen = () => {
 
   return (
     <View style={{ alignItems: 'center', marginTop: 16 }}>
-      <Avatar.Text label="un" />
+      <Avatar.Text label={name.split(" ").reduce((prev, current) => prev + current[0], "")}/>
         <Title> {name} </Title>
       <Subheading>{email}</Subheading>
 

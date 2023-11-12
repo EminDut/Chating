@@ -12,7 +12,9 @@ import {TextInput,Subheading} from "react-native-paper";
 export default function NewRecord() {
   
   const navigation = useNavigation();
-  
+
+
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name,setName] = useState("");
@@ -20,6 +22,7 @@ export default function NewRecord() {
 
 
   const isPasswordStrong = /^(?=.*[A-Z])(?=.*\d)(?=.*\W)[a-zA-Z0-9\S]{8,}$/.test(password);
+
 
   const NewRecord = async () => {
     if (!isPasswordStrong) {
@@ -40,9 +43,11 @@ export default function NewRecord() {
 
       setEmail('');
       setPassword('');
+      navigation.navigate('HomeScreen'); 
 
     } catch (error) {
-
+      
+      setError(error.error);
 
       Alert.alert(
         'Kayıt olma hatası',
@@ -98,6 +103,7 @@ export default function NewRecord() {
               style={Styles.gearinput}
               placeholder="E-mail"
               onChangeText={text => setEmail(text)}
+              keyboardType="email-address"
               value={email}
             />
 

@@ -11,6 +11,7 @@ export default function InputUser({user, setUser, password, setPassword}) {
     <View>
       <TextInput
         onChangeText={text => setUser(text)}
+        keyboardType="email-address"
         value={user}
         label="E-Mail"
         underlineColor="transparent"
