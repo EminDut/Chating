@@ -1,26 +1,17 @@
-import React, {useState, useEffect} from 'react';
-import {View} from 'react-native';
-import {
-  Avatar,
-  List,
-  Divider,
-  FAB,
-  Portal,
-  Dialog,
-  Button,
-  TextInput,
-} from 'react-native-paper';
-
-import {useNavigation} from '@react-navigation/native';
+import React, { useState, useEffect } from 'react';
+import { View, Alert } from 'react-native';
+import { Avatar, List, Divider, FAB, Portal, Dialog, Button, TextInput } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 import firebase from '@react-native-firebase/app';
 import '@react-native-firebase/firestore';
 
-
 const ChatList = () => {
   const [isDialogVisible, setIsDialogVisible] = useState(false);
-
   const [email, setEmail] = useState('');
   const [userEmail, setUserEmail] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [chats, setChats] = useState([]);
+  const navigation = useNavigation();
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
@@ -28,46 +19,53 @@ const ChatList = () => {
     });
   }, []);
 
-  const [isLoading, SetIsLoading] = useState(false);
-
-  const navigation = useNavigation();
-
-  const createChat = async () => {
-    if (!email || !userEmail) return;
-    SetIsLoading(true);
-
-  const response = await firebase
-      .firestore()
-      .collection('chats')
-      .add({
-        users: [email, userEmail],
-      });
-
-    SetIsLoading(false);
-    setIsDialogVisible(false);
-    
-    navigation.navigate('Chat',{ chatId: response.id });
-  };
-
-  const [chats, setChats] = useState([]);
-
   useEffect(() => {
-    return firebase
+    const unsubscribe = firebase
       .firestore()
       .collection('chats')
       .where('users', 'array-contains', email)
       .onSnapshot(querySnapshot => {
         setChats(querySnapshot.docs);
       });
+
+    return () => unsubscribe();
   }, [email]);
 
+  const createChat = async () => {
+    if (!email || !userEmail) return;
+
+    // Kullanıcının var olup olmadığını kontrol et
+    const userSnapshot = await firebase.firestore().collection('chats').where('users', 'array-contains', userEmail).get();
+
+    if (userSnapshot.empty) {
+
+      setIsLoading(false);
+      Alert.alert('User not found (: ');
+      return;
+    }
+
+    setIsLoading(true);
+
+    const response = await firebase
+      .firestore()
+      .collection('chats')
+      .add({
+        users: [email, userEmail],
+      });
+
+    setIsLoading(false);
+    setIsDialogVisible(false);
+
+    navigation.navigate('Chat', { chatId: response.id });
+  };
+
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       {chats.map(chat => (
-        <React.Fragment>
+        <React.Fragment key={chat.id}>
           <List.Item
             title={chat.data().users.find(x => x !== email)}
-            description={(chat.data().messages ?? [] ) [0]?.text ?? undefined }
+            description={(chat.data().messages ?? [])[0]?.text ?? ''}
             left={() => (
               <Avatar.Text
                 label={chat
@@ -79,9 +77,9 @@ const ChatList = () => {
                 left={10}
               />
             )}
-            onPress={() => navigation.navigate("Chat",{chatId:chat.id})}
+            onPress={() => navigation.navigate('Chat', { chatId: chat.id })}
           />
-          <Divider inset={true} />
+          <Divider inset={true} key={`divider-${chat.id}`} />
         </React.Fragment>
       ))}
 
@@ -97,11 +95,10 @@ const ChatList = () => {
               onChangeText={text => setUserEmail(text)}
             />
           </Dialog.Content>
-
           <Dialog.Actions>
             <Button onPress={() => setIsDialogVisible(false)}>CANCEL</Button>
             <Button onPress={() => createChat()} loading={isLoading}>
-              SAVE
+              ADD
             </Button>
           </Dialog.Actions>
         </Dialog>
@@ -109,31 +106,11 @@ const ChatList = () => {
 
       <FAB
         icon="plus"
-        style={{position: 'absolute', right: 16, bottom: 16}}
+        style={{ position: 'absolute', right: 16, bottom: 16 }}
         onPress={() => setIsDialogVisible(true)}
       />
     </View>
   );
 };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     padding: 20,
-//   },
-//   input: {
-//     height: 40,
-//     borderColor: 'gray',
-//     borderWidth: 1,
-//     marginBottom: 10,
-//     paddingHorizontal: 10,
-//     borderRadius: 13,
-//   },
-//   resultItem: {
-//     paddingVertical: 10,
-//     borderBottomWidth: 1,
-//     borderBottomColor: 'lightgray',
-//   },
-// });
 
 export default ChatList;

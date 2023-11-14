@@ -16,7 +16,8 @@ const logoImg = require('../assets/logo2.png');
 
 
 function LoginScreen() {
-  const navigation = useNavigation();
+const navigation = useNavigation();
+
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
 
