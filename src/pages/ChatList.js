@@ -21,6 +21,7 @@ const ChatList = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [chats, setChats] = useState([]);
   const navigation = useNavigation();
+  
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
@@ -42,35 +43,59 @@ const ChatList = () => {
 
   const createChat = async () => {
     if (!email || !userEmail) return;
-
+  
     // Kullanıcının var olup olmadığını kontrol etmek için kullanıyorum..
     const userSnapshot = await firebase
       .firestore()
       .collection('chats')
-      .where('users', 'array-contains', userEmail)
+      .where('users', 'array-contains', userEmail.toLowerCase()) // Küçük harfe dönüştürülmüş haliyle kontrol et
       .get();
-
+  
     if (userSnapshot.empty) {
       setIsLoading(false);
       Alert.alert('User not found (: ');
       return;
     }
-
+  
+    // Kullanıcının zaten var olan bir sohbeti var mı kontrol et
+    const existingChat = await firebase
+      .firestore()
+      .collection('chats')
+      .where('users', '==', [email.toLowerCase(), userEmail.toLowerCase()]) // Küçük harfe dönüştürülmüş haliyle kontrol et
+      .get();
+  
+    if (!existingChat.empty) {
+      setIsLoading(false);
+      Alert.alert('Chat already exists (: ');
+      return;
+    }
+  
     setIsLoading(true);
-
+  
     const response = await firebase
       .firestore()
       .collection('chats')
       .add({
-        users: [email, userEmail],
+        users: [email.toLowerCase(), userEmail.toLowerCase()], // Küçük harfe dönüştürülmüş haliyle ekle
       });
-
+  
     setIsLoading(false);
     setIsDialogVisible(false);
+  
+    navigation.navigate('Chat', { chatId: response.id });
+  };
+  
 
-    navigation.navigate('Chat', {chatId: response.id});
+  const deleteChat = async (chatId) => {
+    try {
+      await firebase.firestore().doc(`chats/${chatId}`).delete();
+    } catch (error) {
+      console.error('Error deleting chat:', error);
+      Alert.alert('Error', 'An error occurred while deleting the chat');
+    }
   };
 
+  
   return (
     <View style={{flex: 1}}>
       {chats.map(chat => (
@@ -80,9 +105,7 @@ const ChatList = () => {
             description={(chat.data().messages ?? [])[0]?.text ?? ''}
             left={() => (
               <Avatar.Text
-                label={chat
-                  .data()
-                  .users.find(x => x !== email)
+                label={(chat.data().users.find(x => x !== email) || '')
                   .split(' ')
                   .reduce((prev, current) => prev + current[0], '')}
                 size={56}
@@ -90,11 +113,24 @@ const ChatList = () => {
               />
             )}
             onPress={() => navigation.navigate('Chat', {chatId: chat.id})}
+            onLongPress={() => {
+              Alert.alert(
+                'Delete Chat',
+                'Are you sure you want to delete this chat?',
+                [
+                  {text: 'Cancel', style: 'cancel'},
+                  {
+                    text: 'Delete',
+                    onPress: () => deleteChat(chat.id),
+                    style: 'destructive',
+                  },
+                ]
+              );
+            }}
           />
           <Divider inset={true} key={`divider-${chat.id}`} />
         </React.Fragment>
       ))}
-
       <Portal>
         <Dialog
           visible={isDialogVisible}

@@ -25,6 +25,7 @@
     "react": "18.2.0",
     "react-icons": "^4.11.0",
     "react-native": "0.71.8",
+    "react-native-gesture-handler": "^2.13.4",
     "react-native-gifted-chat": "^2.4.0",
     "react-native-image-crop-picker": "^0.40.1",
     "react-native-paper": "^5.11.1",
