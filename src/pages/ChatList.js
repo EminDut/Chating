@@ -1,7 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { View, Alert } from 'react-native';
-import { Avatar, List, Divider, FAB, Portal, Dialog, Button, TextInput } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
+import React, {useState, useEffect} from 'react';
+import {View, Alert} from 'react-native';
+import {
+  Avatar,
+  List,
+  Divider,
+  FAB,
+  Portal,
+  Dialog,
+  Button,
+  TextInput,
+} from 'react-native-paper';
+import {useNavigation} from '@react-navigation/native';
 import firebase from '@react-native-firebase/app';
 import '@react-native-firebase/firestore';
 
@@ -34,11 +43,14 @@ const ChatList = () => {
   const createChat = async () => {
     if (!email || !userEmail) return;
 
-    // Kullanıcının var olup olmadığını kontrol et
-    const userSnapshot = await firebase.firestore().collection('chats').where('users', 'array-contains', userEmail).get();
+    // Kullanıcının var olup olmadığını kontrol etmek için kullanıyorum..
+    const userSnapshot = await firebase
+      .firestore()
+      .collection('chats')
+      .where('users', 'array-contains', userEmail)
+      .get();
 
     if (userSnapshot.empty) {
-
       setIsLoading(false);
       Alert.alert('User not found (: ');
       return;
@@ -56,11 +68,11 @@ const ChatList = () => {
     setIsLoading(false);
     setIsDialogVisible(false);
 
-    navigation.navigate('Chat', { chatId: response.id });
+    navigation.navigate('Chat', {chatId: response.id});
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       {chats.map(chat => (
         <React.Fragment key={chat.id}>
           <List.Item
@@ -77,7 +89,7 @@ const ChatList = () => {
                 left={10}
               />
             )}
-            onPress={() => navigation.navigate('Chat', { chatId: chat.id })}
+            onPress={() => navigation.navigate('Chat', {chatId: chat.id})}
           />
           <Divider inset={true} key={`divider-${chat.id}`} />
         </React.Fragment>
@@ -106,7 +118,7 @@ const ChatList = () => {
 
       <FAB
         icon="plus"
-        style={{ position: 'absolute', right: 16, bottom: 16 }}
+        style={{position: 'absolute', right: 16, bottom: 16}}
         onPress={() => setIsDialogVisible(true)}
       />
     </View>
