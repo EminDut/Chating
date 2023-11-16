@@ -8,11 +8,10 @@ import TouchablePrivacy from '../Inputs/TouchablePrivacy';
 import TouchableAccount from '../Inputs/TouchableAccount';
 import KeyboardControl from '../Inputs/KeyboardControl';
 import auth from '@react-native-firebase/auth';
-import HomeScreen from './HomeScreen';
+
+
 
 const logoImg = require('../assets/logo2.png');
-
-
 
 
 function LoginScreen() {

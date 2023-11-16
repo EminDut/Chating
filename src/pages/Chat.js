@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, KeyboardAvoidingView, Alert } from 'react-native';
+import { View, KeyboardAvoidingView, Alert, ImageBackground,Platform } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import firebase from '@react-native-firebase/app';
-import { GiftedChat } from 'react-native-gifted-chat';
+import { GiftedChat,} from 'react-native-gifted-chat';
 import KeyboardControl from '../Inputs/KeyboardControl';
 
+
+
 const Chat = () => {
+
   const route = useRoute();
 
   const [messages, setMessages] = useState([]);
@@ -54,11 +57,14 @@ const Chat = () => {
     console.error('Error deleting message:', error);
     Alert.alert('Error', 'An error occurred while deleting the message');
   }
+  
 };
 
-
   return (
+
     <KeyboardControl>
+      <ImageBackground
+        source={require('../assets/dk2.jpg')}  style={{ flex: 1, resizeMode: 'cover' }}>
       <View style={{ flex: 0.91 }}>
         <GiftedChat
           messages={messages.map((x) => ({
@@ -95,7 +101,9 @@ const Chat = () => {
             style={{ flex: 1 }}
           />
         ) : null}
+        
       </View>
+      </ImageBackground>
     </KeyboardControl>
   );
 };

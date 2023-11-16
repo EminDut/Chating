@@ -1,27 +1,19 @@
 import React, {useState, useEffect} from 'react';
 import {View, Alert} from 'react-native';
-import {
-  Avatar,
-  List,
-  Divider,
-  FAB,
-  Portal,
-  Dialog,
-  Button,
-  TextInput,
-} from 'react-native-paper';
+import { Avatar,  List,  Divider,  FAB,  Portal,  Dialog, Button, TextInput, } from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import firebase from '@react-native-firebase/app';
 import '@react-native-firebase/firestore';
 
 const ChatList = () => {
+
   const [isDialogVisible, setIsDialogVisible] = useState(false);
   const [email, setEmail] = useState('');
   const [userEmail, setUserEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [chats, setChats] = useState([]);
+
   const navigation = useNavigation();
-  
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
@@ -41,52 +33,53 @@ const ChatList = () => {
     return () => unsubscribe();
   }, [email]);
 
-  const createChat = async () => {
-    if (!email || !userEmail) return;
-  
-    // Kullanıcının var olup olmadığını kontrol etmek için kullanıyorum..
+  const createChat = async () => {           // Kullanıcının var olup olmadığını kontrol etmek için kullanıyorum..
+    if (!email || !userEmail) return; 
+
+   
+
     const userSnapshot = await firebase
       .firestore()
       .collection('chats')
-      .where('users', 'array-contains', userEmail.toLowerCase()) // Küçük harfe dönüştürülmüş haliyle kontrol et
+      .where('users', 'array-contains', userEmail.toLowerCase()) // Küçük ve Büyük harfle yazılmasını önlüyor hep küçük kabul ediyor aksi takdirdi 2 tane q ve Q kullanıcına send yapıyor.
       .get();
-  
+
     if (userSnapshot.empty) {
       setIsLoading(false);
       Alert.alert('User not found (: ');
       return;
     }
-  
+
     // Kullanıcının zaten var olan bir sohbeti var mı kontrol et
+
     const existingChat = await firebase
       .firestore()
       .collection('chats')
-      .where('users', '==', [email.toLowerCase(), userEmail.toLowerCase()]) // Küçük harfe dönüştürülmüş haliyle kontrol et
+      .where('users', '==', [email.toLowerCase(), userEmail.toLowerCase()]) 
       .get();
-  
+
     if (!existingChat.empty) {
       setIsLoading(false);
       Alert.alert('Chat already exists (: ');
       return;
     }
-  
+
     setIsLoading(true);
-  
+
     const response = await firebase
       .firestore()
       .collection('chats')
       .add({
         users: [email.toLowerCase(), userEmail.toLowerCase()], // Küçük harfe dönüştürülmüş haliyle ekle
       });
-  
+
     setIsLoading(false);
     setIsDialogVisible(false);
-  
-    navigation.navigate('Chat', { chatId: response.id });
-  };
-  
 
-  const deleteChat = async (chatId) => {
+    navigation.navigate('Chat', {chatId: response.id});
+  };
+
+  const deleteChat = async chatId => {
     try {
       await firebase.firestore().doc(`chats/${chatId}`).delete();
     } catch (error) {
@@ -95,7 +88,6 @@ const ChatList = () => {
     }
   };
 
-  
   return (
     <View style={{flex: 1}}>
       {chats.map(chat => (
@@ -124,7 +116,7 @@ const ChatList = () => {
                     onPress: () => deleteChat(chat.id),
                     style: 'destructive',
                   },
-                ]
+                ],
               );
             }}
           />
