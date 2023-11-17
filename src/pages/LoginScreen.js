@@ -18,46 +18,46 @@ function LoginScreen() {
 const navigation = useNavigation();
 
 
-  const [user, setUser] = useState('');
-  const [password, setPassword] = useState('');
+  // const [user, setUser] = useState('');
+  // const [password, setPassword] = useState('');
 
-  const handleLogin = async props => {
-    try {
-      if (user.length > 3 && password.length >= 8) {
-        await auth().signInWithEmailAndPassword(user, password);
+  // const handleLogin = async props => {
+  //   try {
+  //     if (user.length > 3 && password.length >= 8) {
+  //       await auth().signInWithEmailAndPassword(user, password);
 
-        navigation.navigate('HomeScreen');
-      } else {
-        Alert.alert(' Kullanıcı adı ve şifre boş geçilemez.');
-      }
-    } catch (error) {
-      console.log(error);
-      // setMessage(error.message);
-      Alert.alert(
-        'Kullanıcı Adı veya Şifre yanlış, lütfen tekrar deneyiniz...',
-      );
+  //       navigation.navigate('HomeScreen');
+  //     } else {
+  //       Alert.alert(' Kullanıcı adı ve şifre boş geçilemez.');
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //     // setMessage(error.message);
+  //     Alert.alert(
+  //       'Kullanıcı Adı veya Şifre yanlış, lütfen tekrar deneyiniz...',
+  //     );
 
-      setUser('');
-      setPassword('');
-    }
-  };
+  //     setUser('');
+  //     setPassword('');
+  //   }
+  // };
 
  
        
   
 
-  // const handleLogin = async () => {
-  //   try {
-  //     navigation.navigate('HomeScreen');
-  //   } catch (error) {
-  //     console.log(error);
-  //     Alert.alert(
-  //       'Kullanıcı Adı veya Şifre yanlış, lütfen tekrar deneyiniz...',
-  //     );
-  //     setUser("");
-  //     setPassword("");
-  //   }
-  // };
+  const handleLogin = async () => {
+    try {
+      navigation.navigate('HomeScreen');
+    } catch (error) {
+      console.log(error);
+      Alert.alert(
+        'Kullanıcı Adı veya Şifre yanlış, lütfen tekrar deneyiniz...',
+      );
+      setUser("");
+      setPassword("");
+    }
+  };
 
   const handleTouchablePress = () => {
     navigation.navigate('TermScreen');
@@ -94,12 +94,12 @@ const navigation = useNavigation();
             alignItems: 'center',
             paddingTop: 60,
           }}>
-          <InputUser
+          {/* <InputUser
             user={user}
             setUser={setUser}
             password={password}
             setPassword={setPassword}
-          />
+          /> */}
           <TouchableLogin handleLogin={handleLogin} />
           <TouchableAccount handleUser={handleUser} />
         </View>

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Alert} from 'react-native';
+import {View, Alert, ImageBackground} from 'react-native';
 import { Avatar,  List,  Divider,  FAB,  Portal,  Dialog, Button, TextInput, } from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import firebase from '@react-native-firebase/app';
@@ -89,7 +89,10 @@ const ChatList = () => {
   };
 
   return (
-    <View style={{flex: 1}}>
+
+    <View style={{ flex: 1 }}>
+    <ImageBackground source={require("../assets/dk6.jpg")} style={{ flex: 1, resizeMode: "cover" }}>
+      <View style={{ flex: 1, backgroundColor: 'rgba(180,50,50,0.1)' }}>
       {chats.map(chat => (
         <React.Fragment key={chat.id}>
           <List.Item
@@ -119,6 +122,7 @@ const ChatList = () => {
                 ],
               );
             }}
+            style={{ borderBottomWidth: 1, borderBottomColor: 'rgba(255, 255, 255, 0.1)' }}
           />
           <Divider inset={true} key={`divider-${chat.id}`} />
         </React.Fragment>
@@ -149,7 +153,9 @@ const ChatList = () => {
         style={{position: 'absolute', right: 16, bottom: 16}}
         onPress={() => setIsDialogVisible(true)}
       />
-    </View>
+      </View>
+    </ImageBackground>
+  </View>
   );
 };
 

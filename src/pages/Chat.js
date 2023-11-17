@@ -64,7 +64,7 @@ const Chat = () => {
 
     <KeyboardControl>
       <ImageBackground
-        source={require('../assets/dk2.jpg')}  style={{ flex: 1, resizeMode: 'cover' }}>
+        source={require('../assets/dk6.jpg')}  style={{ flex: 1, resizeMode: 'cover' }}>
       <View style={{ flex: 0.91 }}>
         <GiftedChat
           messages={messages.map((x) => ({
