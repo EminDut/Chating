@@ -180,21 +180,13 @@ const ProfileScreen = () => {
       if (user) {
         setImageUri(user.photoURL);
         setName(user.displayName || '');
-<<<<<<< HEAD
 
-=======
-  
->>>>>>> 922672afa26b2ac42d903ef6d51ac4728bf7093b
         try {
           const userDoc = await firestore()
             .collection('chats')
             .doc(user.uid)
             .get();
-<<<<<<< HEAD
 
-=======
-  
->>>>>>> 922672afa26b2ac42d903ef6d51ac4728bf7093b
           if (userDoc.exists) {
             const userData = userDoc.data();
             console.log('Kullanıcı Verisi:', userData);
@@ -202,21 +194,13 @@ const ProfileScreen = () => {
             setPhone(userData.phone || '');
           } else {
             console.log('Kullanıcı belgesi mevcut değil.');
-<<<<<<< HEAD
 
-=======
-  
->>>>>>> 922672afa26b2ac42d903ef6d51ac4728bf7093b
             // Kullanıcı belgesi yoksa, belgeyi oluştur
             await firestore().collection('chats').doc(user.uid).set({
               about: 'Bilgi yok',
               phone: 'Telefon yok',
             });
-<<<<<<< HEAD
 
-=======
-  
->>>>>>> 922672afa26b2ac42d903ef6d51ac4728bf7093b
             console.log('Kullanıcı belgesi oluşturuldu.');
           }
         } catch (error) {
@@ -225,7 +209,6 @@ const ProfileScreen = () => {
       } else {
         console.log('Kullanıcı girişi yapılmamış.');
       }
-<<<<<<< HEAD
 
       // setUser fonksiyonu kullanıcıyı güncelle
       setUser(user);
@@ -233,21 +216,11 @@ const ProfileScreen = () => {
 
     return () => unsubscribe();
   }, [setUser]);
-=======
-  
-      setUser(user); // user'ı güncelle
-    });
-  
-    return () => unsubscribe();
-  }, [refreshData, setUser]); // refreshData değiştiğinde useEffect'i çağır
-  
->>>>>>> 922672afa26b2ac42d903ef6d51ac4728bf7093b
 
   
 
   return (
     <View style={{ flex: 1, alignItems: 'center', marginTop: 80 }}>
-      <View></View>
       <TouchableOpacity
         onPress={() => setShowFullImage(true)}
         accessibilityLabel="Profil Resmini Değiştir.">
