@@ -221,6 +221,7 @@ const ProfileScreen = () => {
 
   return (
     <View style={{ flex: 1, alignItems: 'center', marginTop: 80 }}>
+      <View></View>
       <TouchableOpacity
         onPress={() => setShowFullImage(true)}
         accessibilityLabel="Profil Resmini Değiştir.">
