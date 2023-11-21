@@ -6,6 +6,8 @@ import { Avatar, Button } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
+import firestore from "@react-native-firebase/firestore";
+import firebase from '@react-native-firebase/app';
 
 const ProfileScreen = () => {
   const [imageUri, setImageUri] = useState(null);
@@ -16,6 +18,10 @@ const ProfileScreen = () => {
   const [editingField, setEditingField] = useState('');
   const [tempValue, setTempValue] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const [refreshData, setRefreshData] = useState(false);
+  const [user, setUser] = useState(null);
+
+
 
   const handleImageUpload = async selectedImage => {
     try {
@@ -134,15 +140,24 @@ const ProfileScreen = () => {
     try {
       switch (editingField) {
         case 'name':
+          // Kullanıcı adı güncellendiğinde auth() üzerinde güncelliyoruz
           await auth().currentUser.updateProfile({
             displayName: tempValue,
           });
           setName(tempValue);
           break;
         case 'about':
+          // 'about' alanını güncelliyoruz ve Firestore'da saklıyoruz
+          await firestore().collection('chats').doc(auth().currentUser.uid).update({
+            about: tempValue,
+          });
           setAbout(tempValue);
           break;
         case 'phone':
+          // 'phone' alanını güncelliyoruz ve Firestore'da saklıyoruz
+          await firestore().collection('chats').doc(auth().currentUser.uid).update({
+            phone: tempValue,
+          });
           setPhone(tempValue);
           break;
         default:
@@ -157,15 +172,48 @@ const ProfileScreen = () => {
   
 
   
+
   useEffect(() => {
-    const unsubscribe = auth().onAuthStateChanged(user => {
+    const unsubscribe = auth().onAuthStateChanged(async (user) => {
       if (user) {
         setImageUri(user.photoURL);
         setName(user.displayName || '');
+  
+        try {
+          const userDoc = await firestore()
+            .collection('chats')
+            .doc(user.uid)
+            .get();
+  
+          if (userDoc.exists) {
+            const userData = userDoc.data();
+            console.log('Kullanıcı Verisi:', userData);
+            setAbout(userData.about || '');
+            setPhone(userData.phone || '');
+          } else {
+            console.log('Kullanıcı belgesi mevcut değil.');
+  
+            // Kullanıcı belgesi yoksa, belgeyi oluştur
+            await firestore().collection('chats').doc(user.uid).set({
+              about: 'Bilgi yok',
+              phone: 'Telefon yok',
+            });
+  
+            console.log('Kullanıcı belgesi oluşturuldu.');
+          }
+        } catch (error) {
+          console.error('Firestore Hatası:', error);
+        }
+      } else {
+        console.log('Kullanıcı girişi yapılmamış.');
       }
+  
+      setUser(user); // user'ı güncelle
     });
+  
     return () => unsubscribe();
-  }, []);
+  }, [refreshData, setUser]); // refreshData değiştiğinde useEffect'i çağır
+  
 
   
 
