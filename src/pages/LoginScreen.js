@@ -18,8 +18,8 @@ function LoginScreen() {
 const navigation = useNavigation();
 
 
-  // const [user, setUser] = useState('');
-  // const [password, setPassword] = useState('');
+  const [user, setUser] = useState('');
+  const [password, setPassword] = useState('');
 
   // const handleLogin = async props => {
   //   try {
@@ -58,6 +58,11 @@ const navigation = useNavigation();
       setPassword("");
     }
   };
+
+
+
+
+
 
   const handleTouchablePress = () => {
     navigation.navigate('TermScreen');
