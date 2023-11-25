@@ -8,14 +8,13 @@ function KeyboardControl ( { children } ) {
 
 
 return (
+  
   <TouchableWithoutFeedback onPress={keyboard}>
 
     {children}
 
   </TouchableWithoutFeedback>
   
-);
-
-}
+);}
 
 export default KeyboardControl;

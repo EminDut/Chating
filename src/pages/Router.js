@@ -3,7 +3,10 @@ import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import {Provider} from 'react-native-paper';
+import { GlobalProvider } from './GlobalContext'; // Yeni eklenen import
+
 
 import LoginScreen from './LoginScreen';
 import HomeScreen from './HomeScreen';
@@ -16,6 +19,7 @@ import NewAccoundTryScreen from './NewAccoundTryScreen';
 import NewRecord from '../Inputs/NewRecord';
 import Chat from './Chat';
 
+
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -23,6 +27,8 @@ const Router = () => {
  
 
   return (
+    <GlobalProvider>
+
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{flex: 1}}>
@@ -106,6 +112,8 @@ const Router = () => {
         </Provider>
       </NavigationContainer>
     </KeyboardAvoidingView>
+    </GlobalProvider>
+
   );
 };
 

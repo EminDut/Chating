@@ -23,7 +23,7 @@ export default function InputUser({user, setUser, password, setPassword}) {
           borderWidth: 1.2,
           borderRadius: 5,
           fontSize: 14,
-          borderColor:"gray"
+          borderColor:"gray"         
         }}
       />
 

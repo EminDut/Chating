@@ -1,15 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { View, Alert, TouchableOpacity, Image, Modal, TextInput, ScrollView, Text } from 'react-native';
 import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
+
 import ImagePicker from 'react-native-image-crop-picker';
 import { Avatar, Button } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
+
 import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import firestore from "@react-native-firebase/firestore";
-import firebase from '@react-native-firebase/app';
+
+import { useGlobalContext } from './GlobalContext'; // Bağlamı içeri aktarın
+
+
+
 
 const ProfileScreen = () => {
+
+
+  const { profileImage, updateProfileImage } = useGlobalContext();
 
   const [imageUri, setImageUri] = useState(null);
   const [showFullImage, setShowFullImage] = useState(false);
@@ -19,12 +28,11 @@ const ProfileScreen = () => {
   const [editingField, setEditingField] = useState('');
   const [tempValue, setTempValue] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
-  const [refreshData, setRefreshData] = useState(false);
   const [user, setUser] = useState(null);
 
 
 
-  const handleImageUpload = async selectedImage => {
+  const handleImageUpload = async (selectedImage) => {
     try {
       const reference = storage().ref(`images/${selectedImage.path}`);
       await reference.putFile(selectedImage.path);
@@ -34,11 +42,24 @@ const ProfileScreen = () => {
       });
       setImageUri(downloadURL);
       Alert.alert('Success', 'Image uploaded successfully!');
+
+      // Firestore'daki tüm kullanıcıların profil fotoğrafını güncelle
+      const allUsers = await firestore().collection('chats').get();
+      allUsers.forEach(async (userDoc) => {
+        const userId = userDoc.id;
+        await firestore().collection('chats').doc(userId).update({
+          profileImage: downloadURL,
+        });
+      });
+
+      // Profil resmini bağlamdaki fonksiyon aracılığıyla güncelle
+      updateProfileImage(downloadURL);
     } catch (error) {
       console.error('Upload Image Error:', error);
       Alert.alert('Error', 'Failed to upload image.');
     }
   };
+
 
 
   const handleImagePress = async () => {
