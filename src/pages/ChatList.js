@@ -5,11 +5,9 @@ import { useNavigation } from '@react-navigation/native';
 import firebase from '@react-native-firebase/app';
 import '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
-import { useGlobalContext } from './GlobalContext';
+import defaultProfileImage from '../assets/dk2.jpg'; // Varsayılan profil resmi
 
 const ChatList = () => {
-  const { profileImage } = useGlobalContext(); // Profil resmini bağlamdan al
-
   const [isDialogVisible, setIsDialogVisible] = useState(false);
   const [email, setEmail] = useState('');
   const [userEmail, setUserEmail] = useState('');
@@ -115,9 +113,7 @@ const ChatList = () => {
                     source={
                       chat.otherUserProfileImage && chat.otherUserProfileImage !== ""
                         ? { uri: chat.otherUserProfileImage }
-                        : profileImage
-                          ? { uri: profileImage }
-                          : require('../assets/dk2.jpg')
+                        : defaultProfileImage
                     }
                     size={56}
                     left={10}

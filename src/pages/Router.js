@@ -5,7 +5,6 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {Provider} from 'react-native-paper';
-import { GlobalProvider } from './GlobalContext'; // Yeni eklenen import
 
 
 import LoginScreen from './LoginScreen';
@@ -27,7 +26,6 @@ const Router = () => {
  
 
   return (
-    <GlobalProvider>
 
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -112,7 +110,6 @@ const Router = () => {
         </Provider>
       </NavigationContainer>
     </KeyboardAvoidingView>
-    </GlobalProvider>
 
   );
 };

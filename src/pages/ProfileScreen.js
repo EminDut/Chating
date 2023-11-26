@@ -10,16 +10,7 @@ import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import firestore from "@react-native-firebase/firestore";
 
-import { useGlobalContext } from './GlobalContext'; // Bağlamı içeri aktarın
-
-
-
-
 const ProfileScreen = () => {
-
-
-  const { profileImage, updateProfileImage } = useGlobalContext();
-
   const [imageUri, setImageUri] = useState(null);
   const [showFullImage, setShowFullImage] = useState(false);
   const [name, setName] = useState('');
@@ -30,37 +21,43 @@ const ProfileScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [user, setUser] = useState(null);
 
-
+  const updateProfileImage = (newImage) => {
+    setImageUri(newImage);
+  };
 
   const handleImageUpload = async (selectedImage) => {
     try {
       const reference = storage().ref(`images/${selectedImage.path}`);
       await reference.putFile(selectedImage.path);
       const downloadURL = await reference.getDownloadURL();
-      await auth().currentUser.updateProfile({
-        photoURL: downloadURL,
-      });
-      setImageUri(downloadURL);
+  
+      // Güncellemeler
+      updateFirestoreAndProfileImage(downloadURL);
+  
       Alert.alert('Success', 'Image uploaded successfully!');
-
-      // Firestore'daki tüm kullanıcıların profil fotoğrafını güncelle
-      const allUsers = await firestore().collection('chats').get();
-      allUsers.forEach(async (userDoc) => {
-        const userId = userDoc.id;
-        await firestore().collection('chats').doc(userId).update({
-          profileImage: downloadURL,
-        });
-      });
-
-      // Profil resmini bağlamdaki fonksiyon aracılığıyla güncelle
-      updateProfileImage(downloadURL);
     } catch (error) {
       console.error('Upload Image Error:', error);
       Alert.alert('Error', 'Failed to upload image.');
     }
   };
-
-
+  
+  const updateFirestoreAndProfileImage = async (downloadURL) => {
+    await auth().currentUser.updateProfile({ photoURL: downloadURL });
+  
+    const allUsers = await firestore().collection('chats').get();
+    const batch = firestore().batch();
+  
+    allUsers.forEach((userDoc) => {
+      const userId = userDoc.id;
+      const userRef = firestore().collection('chats').doc(userId);
+      batch.update(userRef, { profileImage: downloadURL });
+    });
+  
+    await batch.commit();
+  
+    updateProfileImage(downloadURL);
+  };
+  
 
   const handleImagePress = async () => {
     try {
@@ -148,7 +145,6 @@ const ProfileScreen = () => {
       Alert.alert('Error', 'Failed to save profile.');
     }
   };
-  
 
   const handleEditField = field => {
     setEditingField(field);
@@ -157,7 +153,6 @@ const ProfileScreen = () => {
     );
     setModalVisible(true);
   };
-
 
   const handleSaveTempProfile = async () => {
     try {
@@ -192,9 +187,6 @@ const ProfileScreen = () => {
       Alert.alert('Error', 'Failed to save profile.');
     }
   };
-  
-
-  
 
   useEffect(() => {
     const unsubscribe = auth().onAuthStateChanged(async (user) => {
@@ -231,14 +223,11 @@ const ProfileScreen = () => {
         console.log('Kullanıcı girişi yapılmamış.');
       }
 
-      // setUser fonksiyonu kullanıcıyı güncelle
       setUser(user);
     });
 
     return () => unsubscribe();
   }, [setUser]);
-
-  
 
   return (
     <View style={{ flex: 1, alignItems: 'center', marginTop: 80 }}>
